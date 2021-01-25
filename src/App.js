@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './App.css';
+import { Component } from 'react'
+import { data } from "./model/Model"
+import TextArea from './component/TextArea';
+import RadioButton from './component/RadioButton';
+import CheckBox from './component/CheckBox';
+class App extends Component {
+  render() {
+    return (
+      <form>
+        {
+          data.map((nilai, i) => {
+            if (nilai.type === "essay") {
+              return <TextArea soal={nilai.soal} no={i + 1} />
+            } else if (nilai.type === "radio") {
+              return <RadioButton data={nilai} no={i + 1} />
+            } else if (nilai.type === "checkbox") {
+              return <CheckBox data={nilai} no={i + 1} />
+            }
+          })
+        }
+      </form >
+    )
+  }
 }
 
 export default App;
