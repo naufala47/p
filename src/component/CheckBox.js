@@ -5,40 +5,74 @@ class CheckBox extends Component {
         super(props);
 
         this.state = { jawaban: [] }
+
     }
 
     eventHandler = (event) => {
-        console.log(event);
-        console.log(event.target.checked);
+
+
         if (event.target.checked) {
+
             this.addDataJawaban(event.target.value);
+        } else {
+            this.removeDataJawaban(event.target.value);
+
         }
 
     }
+    //state merender ulang
+    //props tidak berubah
 
     addDataJawaban = (nilai) => {
         let jawab = this.state.jawaban;
         jawab.push(nilai);
         this.setState({ jawaban: jawab })
+        this.addScore(jawab);
 
-        console.log(this.state.jawaban);
+    }
+
+    removeDataJawaban = (nilai) => {
+        let jawab = this.state.jawaban.filter((value) => {
+            return value !== nilai
+        })
+
+        this.setState({ jawaban: jawab })
+
+        this.addScore(jawab);
 
     }
 
-    removeDataJawaban = () => {
+    addScore = (jawab) => {
+
+
+
+        this.props.funcJawab({
+            soal_no: this.props.no,
+            jawaban: jawab
+
+        })
 
     }
+
+
     render() {
         return (
             <div>
-                <label>{this.props.no}.&nbsp;&nbsp;{this.props.data.soal}</label><br />
+                <label>{this.props.no}.  {this.props.data.soal}</label><p></p>
                 {this.props.data.option.map((options, i) => {
-                    return <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id={"soal" + this.props.no} name={"soal" + this.props.no} value={options} onChange={this.eventHandler} />
-                        <label class="form-check-label" for="defaultCheck1">{options}</label>
+
+                    return <div className="form-check" key={i}>
+                        <input className="form-check-input" type="checkbox" value={options} id={"soal" + this.props.no} name={"soal" + this.props.no} onChange={this.eventHandler} />
+                        <label className="form-check-label" htmlFor="defaultCheck1">
+                            {options}
+                        </label>
                     </div>
 
+
                 })}
+
+                {/* <p>jawabannya adalah {this.state.jawaban.map((options)=>`${options},`)}</p><p></p> */}
+
             </div>
         );
     }

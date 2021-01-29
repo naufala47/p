@@ -1,28 +1,48 @@
+import React, { Component } from 'react'
+import Header from './Header'
+import FormPertanyaan from './component/FormPertanyaan'
 
-import './App.css';
-import { Component } from 'react'
-import { data } from "./model/Model"
-import TextArea from './component/TextArea';
-import RadioButton from './component/RadioButton';
-import CheckBox from './component/CheckBox';
-class App extends Component {
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import AboutQuestion from './component/AboutQuestion';
+import CategoryQuiz from './component/CategoryQuiz';
+//router untuk menyiapkan semua yang ada disini
+export default class App extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = { linkStatus: [] }
+  }
+
+  updateLinkStatus = (status) => {
+    this.setState({ linkStatus: status })
+
+
+  }
   render() {
     return (
-      <form>
-        {
-          data.map((nilai, i) => {
-            if (nilai.type === "essay") {
-              return <TextArea soal={nilai.soal} no={i + 1} />
-            } else if (nilai.type === "radio") {
-              return <RadioButton data={nilai} no={i + 1} />
-            } else if (nilai.type === "checkbox") {
-              return <CheckBox data={nilai} no={i + 1} />
-            }
-          })
-        }
-      </form >
+      <Router>
+        <div>
+          <Header linkStatus={this.state.linkStatus} />
+          {/* switch untuk memilih */}
+          <Switch>
+            <Route path="/question">
+              <CategoryQuiz updateLinkStatus={this.updateLinkStatus} />
+            </Route>
+            <Route path="/aboutus">
+              <AboutQuestion updateLinkStatus={this.updateLinkStatus} />
+            </Route >
+            <Route path="/attemptquiz/:type">
+              <FormPertanyaan updateLinkStatus={this.updateLinkStatus} />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     )
   }
 }
-
-export default App;
